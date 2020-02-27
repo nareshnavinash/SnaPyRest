@@ -1,0 +1,13 @@
+README.md
+setup.cfg
+setup.py
+snapyrest/__init__.py
+snapyrest/api.py
+snapyrest/images.py
+snapyrest/store.py
+snapyrest/variable.py
+snapyrest.egg-info/PKG-INFO
+snapyrest.egg-info/SOURCES.txt
+snapyrest.egg-info/dependency_links.txt
+snapyrest.egg-info/requires.txt
+snapyrest.egg-info/top_level.txt

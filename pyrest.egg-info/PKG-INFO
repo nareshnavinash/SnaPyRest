@@ -1,0 +1,292 @@
+Metadata-Version: 2.1
+Name: pyrest
+Version: 0.1.0
+Summary: Package to test Rest API endpoints along with snap mode and image comparison functionality
+Home-page: https://github.com/nareshnavinash/pyrest
+Author: Naresh Sekar
+Author-email: nareshnavinash@gmail.com
+License: UNKNOWN
+Description: # Pyrest
+        
+        Pyrest module is to hold all the common methods used in REST API automation in [PyRest-Python Framework](https://nareshnavinash.github.io/PyRest-Python/). This framework includes methods to download the image files from the rest API and then compare with the stored image files. This framework is built in Python and inspired from the simplicity of [Karate framework by Intuit](https://github.com/intuit/karate) and snapshot mode from [Jest framework by Facebook](https://jestjs.io/).
+        
+        
+        [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+        [![Made with Python](https://img.shields.io/badge/Made%20with-Python-yellow.svg)](https://www.python.org/)
+        [![StackOverflow](http://img.shields.io/badge/Stack%20Overflow-Ask-blue.svg)]( https://stackoverflow.com/users/10505289/naresh-sekar )
+        [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](CONTRIBUTING.md)
+        [![email me](https://img.shields.io/badge/Contact-Email-green.svg)](mailto:nareshnavinash@gmail.com)
+        
+        
+        ![alt text](pyrest/pyrest_module.png)
+        
+        ## Installation
+        
+        Add this line to your application's requirements.txt file:
+        
+        ```
+        pyrest==<version>
+        ```
+        
+        And then execute:
+        
+        ```
+        pip3 install -r requirements.txt
+        ```
+        
+        Or install it yourself as:
+        
+        ```
+        pip3 install pyrest
+        ```
+        
+        ## Usage
+        
+        This module is built to replace the library methods in [PyRest-Python](https://nareshnavinash.github.io/PyRest-Python/) framework. This allows us to share the methods among different teams and completely ignore the repetitive work. For more details on simple no code Rest API automation verify [PyRest-Python](https://nareshnavinash.github.io/PyRest-Python/) page.
+        
+        ### Adding new methods
+        
+        Add all the new methods inside `/pyrest/` path and add import the class inside `__init__.py` file in the same path so that the newly added class can be imported by using this module.
+        
+        ### Require and Include
+        
+        To import this module use,
+        ```
+        import pyrest
+        ```
+        To import specific class in this module use,
+        ```
+        from selpy.api import Api
+        ```
+        
+        ## Detailing the module
+        
+        ## Api
+        
+        This file has all the common methods that are used to execute the rest api calls. Allure reporting and attaching the required files are handled by default so that just calling this methods will take care all the actions. Some of the API actions are,
+        
+        ### Simple test case with an endpoint
+        
+        For a very simple basic get request and to validate the response code we could do,
+        
+        ```
+        Api.get("/name")
+        Api.verify_response_code(200)
+        ```
+        On calling only these two methods from the `Api` library, all the allure report actions, attaching the request and the response file to the reports, and asserting the response code of the response is taken care off.
+        
+        ### Simple test case with validating the response with test data
+        
+        To validate the response json with a test data, one could do the following,
+        
+        ```
+        Api.get("/name")
+        Api.verify_response_code(200)
+        Api.verify_response_json("sample.yml", "test_sample_get_request_001")
+        ```
+        Here, we are trying to take the sample.yml file under `/Data/DynamicData/` folder and then fetch the data for the key `test_sample_get_request_001`. 
+        After getting the data from the stored file, we will compare that with the response data and generate the allure reports along with necessary attachments.
+        
+        The YAML file will be looking like,
+        ```
+        test_sample_get_request_001:
+          age: 20
+          name: Naresh
+        ```
+        
+        While fetching the key from a yaml file, the above file structure will return the data in JSON format. This in turn gives us the edge while creating the test data. One can always save the key value in direct JSON format as well.
+        
+        ```
+        test_sample_get_request_001:
+          age: 20
+          name: Naresh
+        
+        OR
+        
+        test_sample_get_request_001: { "age": 20, "name": "Naresh" }
+        ```
+        In either way JSON parser will get the values in JSON format. Whereas when we use `snap` mode, the file will be saved in the first format which we can see in detail below.
+        
+        ### Simple test case with validating the response with test data and ignoring few keys
+        
+        While validating an api response, we may encounter a scenario where we don't want to validate few keys. In such scenario one can do the following,
+        ```
+        Api.get("/name")
+        Api.verify_response_code(200)
+        Api.ignore_keys("age")
+        Api.verify_response_json("sample.yml", "test_sample_get_request_001")
+        ```
+        The above code will validate the response status code, response json values except `age` key. If you want to have more keys that are supposed to be ignored, have that in the comma separated format,
+        ```
+        Api.get("/name")
+        Api.verify_response_code(200)
+        Api.ignore_keys("age,name")
+        Api.verify_response_json("sample.yml", "test_sample_get_request_001")
+        ```
+        This will ignore the keys `age` and `name` while validating the response with the stored data.
+        
+        ### Simple test case with validating the response with test data and custom markers
+        
+        While validating an api response, we may encounter a scenario where we need to validate whether a key is present or not but not the value for that key. In that case one can always have that marked in their test data with the unique markers specified with `$` symbol.
+        
+        Test File:
+        ```
+        Api.get("/name")
+        Api.verify_response_code(200)
+        Api.verify_response_json("sample.yml", "test_sample_get_request_001")
+        ```
+        Data File:
+        ```
+        test_sample_get_request_001:
+          age: $notnull
+          name: Naresh
+        ```
+        The above combination will validate the response as,
+        1. Whether `age` key is present without Null value in it.
+        2. And `name` is present with the exact same value `Naresh` in it.
+        
+        We can also make the validation so specific for the `age` field in the above example by mentioning that value corresponds to `age` should be a `number`. To achieve this we need to have the following combination.
+        
+        Test File:
+        ```
+        Api.get("/name")
+        Api.verify_response_code(200)
+        Api.verify_response_json("sample.yml", "test_sample_get_request_001")
+        ```
+        Data File:
+        ```
+        test_sample_get_request_001:
+          age: $number
+          name: Naresh
+        ```
+        
+        Apart from the above two there are multiple markers available which are listed as follows,
+        
+        Marker | Description
+        ------ | -----------
+        `$notnull` | Expects actual value to be not-`null`
+        `$array` | Expects actual value to be a JSON array
+        `$object` | Expects actual value to be a JSON object
+        `$boolean` | Expects actual value to be a boolean `true` or `false`
+        `$number` | Expects actual value to be a number
+        `$string` | Expects actual value to be a string
+        `$uuid` | Expects actual (string) value to conform to the UUID format
+        
+        
+        ## Images
+        
+        This module has all the methods corresponding to downloading an image from the REST API endpoint and to validate the same. Similar to API file, all the allure reporting and attachments are taken care here by default, just calling the methods with proper prams will do the necessary steps. Some of the common methods in images file are,
+        
+        ### Test cases with validation of images
+        
+        In few scenarios if we need to validate the image file from the response, first we need to hit the endpoint and get the image URL, after which we need to download the image from the URL and store that in temporary folder, and then compare the image with the stored image. To do this,
+        ```
+        Api.get("/image")
+        Api.verify_response_code(200)
+        Api.verify_response_json("sample.yml", "test_sample_get_request_003")
+        image_url = Api.get_params_from_response("image")
+        Img.download_image(image_url, "downloaded_file")
+        Img.is_equal("Naresh", "downloaded_file")
+        ``` 
+        The above code will save a value from the response json through `Api.get_params_from_response`. If the URL is present inside the nested json one can always give the path to the image url using comma separated value like,
+        ```
+        Api.get_params_from_response("image,0,user,profile,image")
+        ```
+        After getting the Image URL, we need to download it and save it in the temporary folder under `reports/images`. We are also supposed to send the name for the downloading image file. All the download and comparison of images are happening in png format. We need a change in framework if we want to compare images with some other format.
+        
+        Now after downloading, directly give the image name against which we need to compare the downloaded image. The stored image must be under the folder `/Data/Images/`.
+        
+        The method `Img.is_equal` takes care of all the allure reporting part, attaching the images to the report and if there is a mismatch between the images, difference between two images also will be attached to the allure report. as mentioned in the above allure report topic. 
+        
+        ### Test cases with validation of images along with tolerance
+        
+        In few scenarios if we need to validate the image file from the response along with the allowed tolerance. The above method will result in failure even if there is a minute change in the image file. To validate the images along with tolerance one has to change,
+        
+        From: 
+        ```
+        Img.is_equal("Naresh", "downloaded_file")
+        ``` 
+        To:
+        ```
+        Img.is_equal_with_tolerance("Naresh", "downloaded_file")
+        ```
+        This will take the tolerance level from the global data file and validate. Its always recommended to use same tolerance level across the project, but in few cases if one need to have custom tolerance level to an image compare one has to do,
+        ```
+        Img.is_equal_with_tolerance("Naresh", "downloaded_file", 0.5)
+        ```
+        The above code will validate the images with 0.5 percent tolerance level.
+        
+        ## Store
+        
+        This class is to store the run time configurations for this module. Kind of a memcached or redis for our framework. Centralized run time data which are needed by other modules are being stored here and retrieved by other modules.
+        
+        ## Variable
+        
+        This file is used to have the variable data in the runtime. We have a capability to make environment variable have more precedence than the global variable, to implement this we use this file.
+        
+        ## Snap Mode
+        
+        Snap mode is handled in both API and Images file, where if the pytest suite is triggered with the environment variable `snap=1` if there is any failure, the file (either YAML data file or the Image file) will be replaced by the response data.
+        
+        ```
+        snap=1 pytest
+        ``` 
+        But, only this will not ensure the data is getting saved in to dynamic file or image file. One has to script their automation code in such a way that snap feature is supported. For example one can look in to [PyRest-Python](https://nareshnavinash.github.io/PyRest-Python/) framework inside `Tests/test_sample.py`
+        
+        Upon running the tests in normal mode `pytest` the dynamic data will not be overridden rather it will assert the data response data with the stored data.
+        
+        To get this feature running smoothly and to access the variables in smoother way, one has to configure the following params in their framework in `pytest_configure` method (so that these path variables will be set on initiating the pytest).
+        
+        ```
+        from selpy.store import Store
+        
+        def pytest_configure(config):
+            # Configuring the selpy with data path location
+            Store.global_data_path = os.path.dirname(os.path.abspath(__file__)).replace("/Tests", "") + '/Data/GlobalData/global_data.yml'
+            Store.static_data_path = os.path.dirname(os.path.abspath(__file__)).replace("/Tests", "") + '/Data/TestData/'
+            Store.dynamic_data_path = os.path.dirname(os.path.abspath(__file__)).replace("/Tests", "") + '/Data/DynamicData/'
+            Store.root_path = os.path.dirname(os.path.abspath(__file__)).replace("/Tests", "")
+        ``` 
+        
+        ## To publish a module in pypi
+        
+        1. Install the following dependencies
+        ```
+        python3 -m pip install --user --upgrade setuptools wheel
+        ```
+        2. In the root directory of your newly created module run,
+        ```
+        python3 setup.py sdist bdist_wheel
+        ```
+        3. Then add the username and password and upload to the pypi server,
+        ```
+        python3 -m twine upload -u <username> -p <password> --repository-url https://upload.pypi.org/legacy/ dist/* --verbose
+        ```
+        Ensure that you have deleted the old files from your dist directory.
+        
+        
+        ## Contributing
+        
+        Bug reports and pull requests are welcome on GitHub at https://github.com/nareshnavinash/selpy/. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+        
+        ## Authors
+        
+        * **[Naresh Sekar](https://github.com/nareshnavinash)**
+        
+        ## License
+        
+        The gem is available as open source under the terms of the [GPL-3.0 License](https://opensource.org/licenses/GPL-3.0).
+        
+        ## Code of Conduct
+        
+        Everyone interacting in the Teber project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/nareshnavinash/Teber-Gem/blob/master/CODE_OF_CONDUCT.md).
+        
+Keywords: REST,API,API-Automation,Image comparison through response from REST API
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
