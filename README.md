@@ -10,7 +10,7 @@ SnapyRest module is to hold all the common methods used in REST API automation i
 [![email me](https://img.shields.io/badge/Contact-Email-green.svg)](mailto:nareshnavinash@gmail.com)
 
 
-![alt text](snapyrest/pyrest_module.png)
+![alt text](snapyrest/snapyrest_module.png)
 
 ## Installation
 

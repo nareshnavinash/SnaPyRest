@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: snapyrest
-Version: 0.1.0
+Version: 0.1.1
 Summary: Package to test Rest API endpoints along with snap mode and image comparison functionality
 Home-page: https://github.com/nareshnavinash/pyrest
 Author: Naresh Sekar
