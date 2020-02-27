@@ -53,7 +53,7 @@ class Var:
     @staticmethod
     def glob(string):
         try:
-            with open(Var.global_data_path) as file:
+            with open(Store.global_data_path) as file:
                 global_data = yaml.load(file, Loader=yaml.FullLoader)
                 return global_data[string]
         except Exception as e:

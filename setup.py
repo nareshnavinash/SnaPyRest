@@ -12,7 +12,7 @@ install_requires = [
 
 setuptools.setup(
     name="snapyrest",
-    version="0.1.0",
+    version="0.1.1",
     author="Naresh Sekar",
     author_email="nareshnavinash@gmail.com",
     description="Package to test Rest API endpoints along with snap mode and image comparison functionality",
