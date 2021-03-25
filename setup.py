@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 install_requires = [
-    "pyyaml==5.3",
+    "pyyaml==5.4",
     "flake8==3.7.9",
     "imgcompare==2.0.1",
     "diffimg==0.2.3"
