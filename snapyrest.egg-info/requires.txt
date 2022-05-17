@@ -1,4 +1,4 @@
-pyyaml==5.3
-flake8==3.7.9
+pyyaml==6.0
+flake8==4.0.1
 imgcompare==2.0.1
-diffimg==0.2.3
+diffimg==0.3.0

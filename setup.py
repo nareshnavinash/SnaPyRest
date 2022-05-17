@@ -4,15 +4,15 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 install_requires = [
-    "pyyaml==5.3",
-    "flake8==3.7.9",
+    "pyyaml==6.0",
+    "flake8==4.0.1",
     "imgcompare==2.0.1",
-    "diffimg==0.2.3"
+    "diffimg==0.3.0"
 ]
 
 setuptools.setup(
     name="snapyrest",
-    version="0.1.1",
+    version="0.2.0",
     author="Naresh Sekar",
     author_email="nareshnavinash@gmail.com",
     description="Package to test Rest API endpoints along with snap mode and image comparison functionality",
